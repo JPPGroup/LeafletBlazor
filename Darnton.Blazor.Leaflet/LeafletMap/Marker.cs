@@ -19,21 +19,29 @@ namespace Darnton.Blazor.Leaflet.LeafletMap
         /// </summary>
         [JsonIgnore] public MarkerOptions Options { get; }
 
+        [JsonIgnore] public string PopupContent { get; }
+
         /// <summary>
         /// Constructs a marker
         /// </summary>
         /// <param name="latlng">The initial position of the marker.</param>
         /// <param name="options">The <see cref="MarkerOptions"/> used to create the marker.</param>
-        public Marker(LatLng latlng, MarkerOptions options)
+        public Marker(LatLng latlng, MarkerOptions options, string popupContent)
         {
             LatLng = latlng;
             Options = options;
+            PopupContent = popupContent;
         }
 
         /// <inheritdoc/>
         protected override async Task<IJSObjectReference> CreateJsObjectRef()
         {
-            return await JSBinder.JSRuntime.InvokeAsync<IJSObjectReference>("L.marker", LatLng, Options);
+            var marker = await JSBinder.JSRuntime.InvokeAsync<IJSObjectReference>("L.marker", LatLng, Options);
+            if (!string.IsNullOrWhiteSpace(PopupContent))
+            {
+                await marker.InvokeVoidAsync("bindPopup", PopupContent);
+            }
+            return marker;
         }
     }
 }

@@ -1,3 +1,8 @@
 ﻿@inherits LeafletMapBase
 
-<div class="leafletMap" id="@Map.ElementId"></div>
+<div class="leafletMap" id="@Map.ElementId" style="@Style"></div>
+
+@code {
+    [Parameter]
+    public string Style { get; set; }
+}
