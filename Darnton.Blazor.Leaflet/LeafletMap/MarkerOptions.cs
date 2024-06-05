@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.JSInterop;
+using System.Text.Json.Serialization;
 
 namespace Darnton.Blazor.Leaflet.LeafletMap
 {
@@ -65,5 +66,12 @@ namespace Darnton.Blazor.Leaflet.LeafletMap
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool? BubblingMouseEvents { get; set; }
+
+        [JsonIgnore]
+        public Icon Icon { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("icon")]
+        public IJSObjectReference IconRef { get { if (Icon is not null) { return Icon.JSObjectReference; } else { return null; } } }
     }
 }

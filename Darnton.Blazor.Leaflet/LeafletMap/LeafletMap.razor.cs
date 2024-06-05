@@ -23,6 +23,8 @@ namespace Darnton.Blazor.Leaflet.LeafletMap
         /// </summary>
         [Parameter] public TileLayer TileLayer { get; set; }
 
+        [Parameter] public EventCallback BindLayers { get; set; }
+
         /// <inheritdoc/>
         protected async override Task OnAfterRenderAsync(bool firstRender)
         {
@@ -30,6 +32,7 @@ namespace Darnton.Blazor.Leaflet.LeafletMap
             {
                 await Map.BindJsObjectReference(new LeafletMapJSBinder(JSRuntime));
                 await TileLayer.AddTo(Map);
+                await BindLayers.InvokeAsync();
             }
         }
     }
